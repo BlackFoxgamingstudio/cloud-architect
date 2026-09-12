@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "package_id": "PKG-006",
+  "slug": "cloud-architect",
+  "name": "sovereign-cloud-architect",
+  "domain": "Cloud Infrastructure & SRE",
+  "version": "1.0.0",
+  "status": "PRODUCTION_READY",
+  "entrypoint": "src/core.py",
+  "cli_command": "sovereign-cloud-architect",
+  "microservice_port": 8784,
+  "n8n_webhook_path": "cloud-architect-trigger",
+  "n8n_workflow": "n8n/workflow.json",
+  "test_suite": "tests/test_solution.py",
+  "author": "Russell Alan Powers",
+  "license": "MIT"
+}
