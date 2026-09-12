@@ -1,0 +1,39 @@
+version: "3.9"
+# Sovereign Cloud Architect — docker-compose
+# Usage: docker-compose up --build
+
+services:
+  cloud-architect:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    image: sovereign-cloud-architect:latest
+    container_name: sovereign-cloud-architect
+    restart: unless-stopped
+    ports:
+      - "8784:8784"
+    environment:
+      SBB_CLOUD_PROVIDER: ${SBB_CLOUD_PROVIDER}
+      SBB_TERRAFORM_BACKEND: ${SBB_TERRAFORM_BACKEND}
+      SBB_COST_ALERT_THRESHOLD: ${SBB_COST_ALERT_THRESHOLD}
+      SBB_COMPLIANCE_LEVEL: ${SBB_COMPLIANCE_LEVEL}
+      SBB_API_KEY: ${SBB_API_KEY:-change-me}
+      SBB_N8N_EVENT_BUS_URL: ${SBB_N8N_EVENT_BUS_URL:-http://host.docker.internal:5678/webhook/event-bus}
+      SERVICE_PORT: 8784
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - ./.data:/app/.data:rw
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8784/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    networks:
+      - sbb-platform
+
+networks:
+  sbb-platform:
+    external: true
+    name: sbb-platform-network
